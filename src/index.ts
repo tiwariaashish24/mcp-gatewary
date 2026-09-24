@@ -7,9 +7,13 @@ import { promisify } from "node:util";
 
 const execFileAsync = promisify(execFile);
 
+
+
 // ADB path
 const ADB_PATH =
   "C:\\Users\\ujjaw\\Desktop\\platform-tools-latest-windows\\platform-tools\\adb.exe";
+
+  const ADB_TARGET = "10.63.54.47:5555";
 
 const server = new McpServer({
   name: "phone-control-mcp",
@@ -117,7 +121,7 @@ server.registerTool(
     try {
       const { stdout } = await execFileAsync(
         ADB_PATH,
-        ["shell", "dumpsys", "battery"],
+        ["-s", ADB_TARGET, "shell", "dumpsys", "battery"],
         {
           windowsHide: true,
         }
