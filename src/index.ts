@@ -5,6 +5,11 @@ import * as z from "zod/v4";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 
+import {
+  phoneOpenApp,
+  phoneOpenAppSchema,
+} from "./tools/phoneOpenApp.js";
+
 const execFileAsync = promisify(execFile);
 
 
@@ -157,6 +162,73 @@ server.registerTool(
     }
   }
 );
+
+server.registerTool(
+  "phone_open_app",
+  {
+    description: "Open an application on the connected Android phone",
+    inputSchema: phoneOpenAppSchema,
+  },
+  phoneOpenApp
+);
+
+
+// // ============================================================
+// // 5. OPEN PHONE APP
+// // ============================================================
+
+// server.registerTool(
+//   "phone_open_app",
+//   {
+//     description: "Open an application on the connected Android phone",
+
+//     inputSchema: z.object({
+//       packageName: z.string(),
+//     }),
+//   },
+
+//   async ({ packageName }) => {
+//     try {
+//       const { stdout, stderr } = await execFileAsync(
+//         ADB_PATH,
+//         [
+//           "-s",
+//           ADB_TARGET,
+//           "shell",
+//           "monkey",
+//           "-p",
+//           packageName,
+//           "1",
+//         ],
+//         {
+//           windowsHide: true,
+//         }
+//       );
+
+//       return {
+//         content: [
+//           {
+//             type: "text",
+//             text: `App launch command executed.\nPackage: ${packageName}\n${stdout || stderr}`,
+//           },
+//         ],
+//       };
+//     } catch (error) {
+//       return {
+//         content: [
+//           {
+//             type: "text",
+//             text: `Failed to open app: ${
+//               error instanceof Error ? error.message : String(error)
+//             }`,
+//           },
+//         ],
+//         isError: true,
+//       };
+//     }
+//   }
+// );
+
 
 // ============================================================
 // START MCP SERVER
